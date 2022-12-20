@@ -1,0 +1,30 @@
+services:
+  my-wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 4563:80
+    environment:
+      WORDPRESS_DB_HOST: my-mariadb
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: 123
+      WORDPRESS_DB_NAME: wp_database
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wordpress:/var/www/html
+
+  my-mariadb:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: 123
+      MARIADB_DATABASE: wp_database
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./mariadb:/docker-entrypoint-initdb.d/
+
+volumes:
+  mariadb_data:
+  wordpress_data:
